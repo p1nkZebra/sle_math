@@ -5,7 +5,7 @@ module SLEMath
     def self.parse_sle_to_matrix(sle_str)
       # получаем названия переменных
       vars = []
-      sle_str.scan(/\w+/).each { |w| vars << w if w !~ /\d+/ && !vars.include?(w) }
+      sle_str.scan(/\w+/).each { |w| vars << w if w !~ /^\d+/ && !vars.include?(w) }
 
       # уравнения как элементы массива
       eqs = sle_str.split("\n").select { |eq| eq != '' }
@@ -20,7 +20,9 @@ module SLEMath
       # парсим уравнения и заполняем пустышки
       eqs.each_with_index do |eq, index|
         # делим уравнение на члены, сохраняя знак
-        parts = eq.scan(/\s*([+-]?\s*[\.\w]+(?:\s*[\*\/]\s*[\.\w]+)*)\s*/).map { |member| member.first }
+        var_or_number = '(?:\w|[\d\._])+'
+        #parts = eq.scan(/\s*([+-]?\s*#{var_or_number}(?:\s*[\*\/]\s*#{var_or_number})*)\s*/).map { |member| member.first }
+        parts = eq.scan(/([+-]?#{var_or_number}(?:[\*\/]#{var_or_number})?)/).map { |member| member.first }
 
         # заполняем пустышки
         parts.each do |member|
@@ -34,6 +36,8 @@ module SLEMath
 
     private
 
+    # возвращает массив уравнений, включающих все члены, но не имеющих знаков равенства
+    # т.е. подразумевается, что каждое выражение равно нулю
     def self.simplify_sle(vars, eqs)
       # собираем строку, которую будем исполнять
       eval_arr_name = 'evalued_arr'
@@ -45,7 +49,7 @@ module SLEMath
       end
 
       # исполняем собранную строку
-      eval_eqs_parts = eval(istr + eval_arr_name)
+      eval(istr + eval_arr_name)
     end
 
   end
