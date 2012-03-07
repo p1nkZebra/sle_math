@@ -1,6 +1,6 @@
 module SLEMath
-  module Solver
-    def self.solve(a, b)
+	module Solver
+		def self.solve(a, b)
 			#расширяем массив A, добавляя к нему столбец массива B
 			n = a.size
 			0.upto(n-1) do |i|
@@ -14,12 +14,10 @@ module SLEMath
 						a[k][j] = a[k][j] / tmp
 					end
 				end
-				if k < n
-					(k + 1).upto(n-1) do |i| 
-						tmp = (-1) * a[i][k]
-						0.upto(n) do |j|
-							a[i][j] = a[i][j] + a[k][j] * tmp
-						end
+				(k + 1).upto(n-1) do |i| 
+					tmp = (-1) * a[i][k]
+					0.upto(n) do |j|
+						a[i][j] = a[i][j] + a[k][j] * tmp
 					end
 				end
 			end
@@ -34,5 +32,5 @@ module SLEMath
 			end
 			 result = a	
 		end
-  end
+	end
 end
