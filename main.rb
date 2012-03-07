@@ -10,5 +10,8 @@ a, b = SLEMath::Parser::parse_sle_to_matrix(eqs)
 p a, b
 
 # TODO implement code below:
-#result = SLEMath::Solver::solve(a, b)
-#p result
+result = SLEMath::Solver::solve(a, b)
+p "result matrix"
+0.upto(result.size-1) do |i|
+	p result[i]
+end
